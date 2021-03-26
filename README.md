@@ -26,11 +26,15 @@ In my investigation I plan to develop a HTTP server and framework which improves
 
 #### Server
 - Be asyncronous and non-blocking by design.
-- Improve server throughput by at least 30%.
-- Improve server latency by at least 30%.
+- Improve server throughput by at least 40%.
+- Improve server latency by at least 40%.
 - Provide a upgraded interface which is built off of the HTTP spec.
 - Provide a ASGI compatability layer to allow for existing framework intergration.
 - Comply with the modern HTTP/1 spec.
+
+##### What is significant about 40pct?
+Using [TechEmpower Benchmarks](https://www.techempower.com/benchmarks/#section=data-r20&hw=ph&test=fortune&l=zijzen-sf) as a referance; Uvicorn currently benchmarks at around `70,000` requests per second throughput, a 40% increase in throughput would result in a increased throughput of around `30,000` requests / sec reducing the amount of workers needed to supply `70,000` requests per second from 16 workers to ~11 workers, this can produce a large amount of savings for a company upgrading from Uvicorn to Pyre due to the lower amount of hardware required to produce the same results.
+
 
 #### Framework
 - Be asyncronous and non-blocking by design.
