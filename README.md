@@ -25,6 +25,7 @@ Until now the 'fastest' Python server has been a server called `uvicorn`, in rea
 In my investigation I plan to develop a HTTP server and framework which improves the aformentioned points and acheive the following goals:
 
 #### Server
+- Be asyncronous and non-blocking by design.
 - Improve server throughput by at least 30%.
 - Improve server latency by at least 30%.
 - Provide a upgraded interface which is built off of the HTTP spec.
@@ -32,20 +33,37 @@ In my investigation I plan to develop a HTTP server and framework which improves
 - Comply with the modern HTTP/1 spec.
 
 #### Framework
+- Be asyncronous and non-blocking by design.
 - Provide a minimalistic, object oriented routing.
 - Provide the ability to intergrate both local and global middlewear.
 - Provide a sutable response framework for returning HTTP/1 complient responses to the server.
 - Provide a implicit conversion system to convert url arguements into specified types.
 
-#### Propesed Framework Design
+#### Existing Framework Style(s)
 ```py
+# main.py
+
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/')
+def hello_world():
+    return 'Hello, World!'
+```
+
+While the above design works nicely for a small design this does not scale as well when the codebase grows, Flask currently implements `blueprints` however, these prevent being able to back reference the app itself which can add extra limitations and code complexity when design the app with a shared state between endpoints.
+
+#### Proposed Framework Style
+```py
+# blueprint.py
+
 from pyre import framework
 from pyre.framework import App, Request, responses
 
 
 class MyEndpoint(framework.Blueprint):
     def __init__(self, app: App):
-        self.app = app
+        self._app = app
 
     @framework.endpoint("/hello/{name:string}", methods=["GET"])
     async def on_get_hello(self, name: str):
