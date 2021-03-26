@@ -87,14 +87,14 @@ def setup(app: App):
 ```
 This style while being more bulky for small designs, provides a much more robust design for larger code bases being able to referance the web app itself while also being able to be stored in seperate files for diffrent sections.
 
-#### Acceptable Limitations
+### Acceptable Limitations
 After discussing with members of the web development community I have determined a suitable set of acceptable limitations given the timeframe of development.
 - The server will only support the HTTP/1.x protocol (although the web socket protocol could be developed as an extension)
 - The server will not support TLS/SSL encryption and handshaking.
 - The framework will not provide inbuilt / pre-made middlewear.
 - The framework will not support the legacy HTTP/1 Pipelining system.
 
-#### Objectives
+### Objectives
 1. Provide a asyncronous HTTP server supporting the HTTP/1.x protocol.
 2. Support both standard methods of writing the body to a HTTP request (fixed content length / chunked encoding).
 3. Correctly handle socket errors like disconnects, interupts and EOFs.
@@ -106,3 +106,4 @@ After discussing with members of the web development community I have determined
 9. Provide sufficient request routing.
 10. Provide sufficient arguement conversion between types.
 
+## Documented Design
