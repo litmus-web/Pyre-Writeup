@@ -20,6 +20,7 @@ In comparrison to the web systems being developed in other languages as the mode
 Until now the 'fastest' Python server has been a server called `uvicorn`, in reality however, uvicorn is still slow compared to other modern frameworks. On the other hand Python does offer what most other languages do not which is a set of universal, standardised interfaces for servers and frameworks to interact in order to provide a more modular design for the developer; This set of interfaces in themselves are becoming outdated or provide a meaningless abstraction over the standardised HTTP protocol.
 
 ![latencies](https://user-images.githubusercontent.com/57491488/112694270-f8208580-8e79-11eb-957e-9b488f9c9b0f.png)
+![requests](https://user-images.githubusercontent.com/57491488/112694339-18e8db00-8e7a-11eb-8311-b1d7ca55bb4c.png)
 
 
 ### Proposed Solution
