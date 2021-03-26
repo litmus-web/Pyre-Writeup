@@ -7,7 +7,7 @@ However, most servers are starting to run into the following issues:
 - Slow in both throughput and latency
 - Insecure
 - Less robust 
-- Stability at higher connections
+- Lack stability at higher connections
 
 Equally Python frameworks are also starting to suffer from the following issues:
 - Very little diversity in the ecosystem
