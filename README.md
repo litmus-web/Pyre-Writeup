@@ -26,8 +26,8 @@ In my investigation I plan to develop a HTTP server and framework which improves
 
 #### Server
 - Be asyncronous and non-blocking by design.
-- Improve server throughput by at least 40%.
-- Improve server latency by at least 40%.
+- Improve server throughput by upto 40%.
+- Improve server latency by upto 40%.
 - Provide a upgraded interface which is built off of the HTTP spec.
 - Provide a ASGI compatability layer to allow for existing framework intergration.
 - Comply with the modern HTTP/1 spec.
@@ -87,4 +87,22 @@ def setup(app: App):
 ```
 This style while being more bulky for small designs, provides a much more robust design for larger code bases being able to referance the web app itself while also being able to be stored in seperate files for diffrent sections.
 
+#### Acceptable Limitations
+After discussing with members of the web development community I have determined a suitable set of acceptable limitations given the timeframe of development.
+- The server will only support the HTTP/1.x protocol (although the web socket protocol could be developed as an extension)
+- The server will not support TLS/SSL encryption and handshaking.
+- The framework will not provide inbuilt / pre-made middlewear.
+- The framework will not support the legacy HTTP/1 Pipelining system.
+
+#### Objectives
+1. Provide a asyncronous HTTP server supporting the HTTP/1.x protocol.
+2. Support both standard methods of writing the body to a HTTP request (fixed content length / chunked encoding).
+3. Correctly handle socket errors like disconnects, interupts and EOFs.
+4. Support both the ASGI (Asyncronous Server Gateway Interface) and custom PSGI (Pyre Server Gateway Interface) interfaces.
+5. Provide pre-compiled Python wheels for ease of development for users on Linux as well as Windows x64 architecture.
+6. Reduce latency by upto 40%.
+7. Increase request throughput by upto 40%.
+8. Provide both local and global middlewear handlers.
+9. Provide sufficient request routing.
+10. Provide sufficient arguement conversion between types.
 
