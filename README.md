@@ -81,3 +81,6 @@ class MyEndpoint(framework.Blueprint):
 def setup(app: App):
     app.add_blueprint(MyEndpoint(app))
 ```
+This style while being more bulky for small designs, provides a much more robust design for larger code bases being able to referance the web app itself while also being able to be stored in seperate files for diffrent sections.
+
+
