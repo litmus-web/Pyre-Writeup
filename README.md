@@ -1,5 +1,13 @@
 # Pyre-Writeup
 
+## Table of Contents
+
+- [Analysis]()
+- [Design]()
+- [Code Repo]()
+- [Testing]()
+- [Evaluation]()
+
 ## Analysis
 ### The problem
 The current Python ecosystem boasts a wide variety of webservers and frameworks making it one of the key players in the ecosystem.
