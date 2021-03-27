@@ -203,5 +203,9 @@ fn main() {
 }
 ```
 
+### Basic Design Principles
+![Untitled Document(2)](https://user-images.githubusercontent.com/57491488/112736186-a266de80-8f48-11eb-8c99-3f70859af1b7.png)
+
+
 
 
