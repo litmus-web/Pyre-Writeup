@@ -2,7 +2,7 @@
 
 ## Table of Contents
 
-- [Analysis]()
+- [Analysis](https://github.com/Project-Dream-Weaver/Pyre-Writeup/blob/main/README.md#analysis)
 - [Design]()
 - [Code Repo]()
 - [Testing]()
