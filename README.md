@@ -3,7 +3,7 @@
 ## Table of Contents
 
 - [Analysis](https://github.com/Project-Dream-Weaver/Pyre-Writeup/blob/main/README.md#analysis)
-- [Design]()
+- [Design](https://github.com/Project-Dream-Weaver/Pyre-Writeup/blob/main/README.md#documented-design)
 - [Code Repo]()
 - [Testing]()
 - [Evaluation]()
