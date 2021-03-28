@@ -237,10 +237,46 @@ Connection: Keep-Alive
 
 ### Server Design
 
+#### Server Flow
 ![image](https://user-images.githubusercontent.com/57491488/112757289-0c32c700-8fe1-11eb-990e-6793f7259f3e.png)
 This flow chart shows the basic execution model of the Protocol (ignoring TCP keep alive handlers, receiver functions and processors) 
 
+#### Flow Control
+Flow control  is a essential part of my HTTP server as it is responsible for controlling data written to the socket buffer and data received from the socket, if we do not control the flow of data it could leave us vulnerable to response inject attacks potentially using more memory than we have causing the program or physical server itself to crash.
 
+The flow control will be represented by a struct containing atomic bools to represent the state of flow and the transport object for interacting with the socket itself. Due to the nature of Rust’s programming ecosystem I have constructed a prototype in Python that considers how it will be re-implemented in Rust.
+
+#### Python Prototype
+```py
+import asyncio
+
+class FlowControl:
+    def __init__(self, transport: asyncio.Protocol):
+        self.transport = transport
+        self.is_read_paused = False
+        self.is_write_paused = False
+        self.waiter = asyncio.Event()
+    
+    def pause_reading(self):
+        if not self.is_read_paused:
+            self.is_read_paused = True
+            self.transport.pause_reading()
+            
+    def resume_reading(self):
+        if self.is_read_paused:
+            self.is_read_paused = False
+            self.transport.resume_reading()
+            
+    def pause_writing(self):
+        if not self.is_write_paused:
+            self.is_write_paused = True
+            self.waiter.set()
+            
+    def resume_writing(self):
+        if self.is_write_paused:
+            self.is_write_paused = False
+            self.waiter.clear()
+```
 
 #### Protocol Switching
 ![Untitled Document(5)](https://user-images.githubusercontent.com/57491488/112757023-b7db1780-8fdf-11eb-9952-179f7efd57a9.png)
