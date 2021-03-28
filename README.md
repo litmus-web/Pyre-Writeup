@@ -232,7 +232,7 @@ Connection: Keep-Alive
 
 
 #### ASGI Server Overview
-![Untitled Document(4)](https://user-images.githubusercontent.com/57491488/112751248-dc75c600-8fc4-11eb-98ca-40c1324626f5.png)
+![image](https://user-images.githubusercontent.com/57491488/112757585-46e92f00-8fe2-11eb-867c-3eff8cd074f6.png)
 
 
 ### Server Design
