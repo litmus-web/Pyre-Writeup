@@ -267,7 +267,7 @@ Flow control  is a essential part of my HTTP server as it is responsible for con
 
 The flow control will be represented by a struct containing atomic bools to represent the state of flow and the transport object for interacting with the socket itself. Due to the nature of Rust’s programming ecosystem I have constructed a prototype in Python that considers how it will be re-implemented in Rust.
 
-#### Python Prototype
+##### Python Prototype
 ```py
 import asyncio
 
@@ -300,6 +300,31 @@ class FlowControl:
 ```
 
 #### Protocol Switching
+
+The ability to switch protocol is a key aspect of my project to allow for future expandability, this may prove to be a challenge in Rust due to it's immutable nature. However, I have managed to come up with a solution using Rust's Enums to register each targetted protocol e.g.
+
+```rust
+enum Protcols {
+    H1,
+    H2,
+    WS,
+}
+```
+
+These enums will help me choose which protocol to target with events from the main server handler, although this does not stop the limitation that I must create each protcol pre-emptively rather than lazily, although this should not be an issue for my investigation as I am only using one set protocol (HTTP/1 or H1 as I will call it).
+
 ![image](https://user-images.githubusercontent.com/57491488/112757569-2faa4180-8fe2-11eb-8a46-83e012c6bac3.png)
 
+
+#### Parsing
+
+One of the key parts of my server will be the parser, for the HTTP/1 protocol I will be using the [httparse crate](https://crates.io/crates/httparse) in order to provide a zero copy parser, this parser using the push style rather than a callback based system which is more suited to Rust's style.
+
+Due to limtations however, this required me to pre-define an allocate a array of headers, this mean I am going to allow a maximum of 100 headers which is more than enough due to the average amount of headers being no more than 30 headers. This does create the issue however, that this can create bulky allocations which can be slow and in-efficient and also increase memory usage.
+
+##### Fixing the Header issue
+
+To get around the aformentioned issue with pre-defining header amounts I am going to be using unsafe Rust which forgoes the memory safety and constraints of the normal language, this is generally very dangerous to use and must be considered carefully, for this specific case however, we will be fine as we garentee that the un-initialised memory using `mem::unitialised()` will be initialised before we use it.
+
+This solution fixes
 
