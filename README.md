@@ -489,7 +489,7 @@ The base request class should contain the:
 | method            | str                   | A standard HTTP method e.g. “GET”, “POST”, etc...                                                                             |
 | url               | str                   | The requested url which has been percent decoded.                                                                             |
 | headers           | RequestHeaders        | A RequestHeaders instance containing the raw headers that are then parsed as and when needed using getter and setter dunders. |
-| receive           | ASGI Receive Callback | The property containing the ASGI Receive callback.                                                                            |
+| read()           | coroutine | Reads data from the request and returns it.                                                                           |
 | server_info       | Tuple[str, int]       | A 2 length long tuple containing the address (str) and the port (int)                                                         |
 | remote_address    | Tuple[str, int]       | A 2 length long tuple containing the address (str) and the port (int)                                                         |
 
