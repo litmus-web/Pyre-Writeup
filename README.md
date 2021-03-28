@@ -279,7 +279,27 @@ This flow chart shows the basic execution model of the Protocol (ignoring TCP ke
 
 One of the key parts of my server will be the parser, for the HTTP/1 protocol I will be using the [httparse crate](https://crates.io/crates/httparse) in order to provide a zero copy parser, this parser using the push style rather than a callback based system which is more suited to Rust's style.
 
-Due to limtations however, this required me to pre-define an allocate a array of headers, this mean I am going to allow a maximum of 100 headers which is more than enough due to the average amount of headers being no more than 30 headers. This does create the issue however, that this can create bulky allocations which can be slow and in-efficient and also increase memory usage.
+This lets us control our memory usage and body buffer better than the normal callback type parsers like the common HTTPTools parser for Pythonit is important that we maximise Rust’s fast execution time and zero-cost abstraction system to make this as performant as possible as this is generally the most expensive operation to run.
+
+The parser works by constructing a array of n amount of EMPTY_HEADER types where n is the maximum number of headers you wish to allow, I plan on making this a customisable number towards the end of the project allowing greater customisability than other servers. We can simply define out empty headerblock in Rust like so:
+
+```rust
+let mut headers = [httparse::EMPTY_HEADER; MAX_HEADERS];
+```
+
+Once the empty header array has been constructed we create a Request struct instance passing our empty header array as a parameter, this is then used to parse our buffer of bytes (a vector of unassigned 8 bit integers). 
+
+```rust
+let mut headers = [httparse::EMPTY_HEADER; MAX_HEADERS];
+let mut req = httparse::Request::new(&mut headers);
+let result: Result<Status<usize>> = req.parse(b"HTTP Request Body Part");
+```
+
+The result will tell us whether the request is malformed or does not fit within our constraints, 
+    
+The Status<usize> will tell us whether we need to parse more data or not to get a completed response, this means we need to have a general body buffer and append our received data to it before we re-parse.
+    
+While this parsing format is incredibly quick and efficient it can be a doubled edged sword as it requires pre-defining (usually) the amount of headers you want to parse. Due to limtation, this required me to pre-define an allocate a array of headers, this mean I am going to allow a maximum of 100 headers which is more than enough due to the average amount of headers being no more than 30 headers. This does create the issue however, that this can create bulky allocations which can be slow and in-efficient and also increase memory usage.
 
 ##### Fixing the Header issue
 
