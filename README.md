@@ -232,8 +232,17 @@ Connection: Keep-Alive
 
 
 #### ASGI Server Overview
-![image](https://user-images.githubusercontent.com/57491488/112757289-0c32c700-8fe1-11eb-990e-6793f7259f3e.png)
-
-
 ![Untitled Document(4)](https://user-images.githubusercontent.com/57491488/112751248-dc75c600-8fc4-11eb-98ca-40c1324626f5.png)
+
+
+### Server Design
+
+![image](https://user-images.githubusercontent.com/57491488/112757289-0c32c700-8fe1-11eb-990e-6793f7259f3e.png)
+This flow chart shows the basic execution model of the Protocol (ignoring TCP keep alive handlers, receiver functions and processors) 
+
+
+
+#### Protocol Switching
+![Untitled Document(5)](https://user-images.githubusercontent.com/57491488/112757023-b7db1780-8fdf-11eb-9952-179f7efd57a9.png)
+
 
