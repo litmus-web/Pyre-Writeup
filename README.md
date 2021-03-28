@@ -205,8 +205,7 @@ fn main() {
 
 ### Basic Design Principles
 
-
-#### HTTP Request overview
+#### HTTP Request request - response cycle
 ![Untitled Document(3)](https://user-images.githubusercontent.com/57491488/112736218-efe34b80-8f48-11eb-8ad9-1fd135932058.png)
 
 1. The client sends the initial HTTP request with a socket connection, this looks something like this: 
@@ -232,3 +231,4 @@ Connection: Keep-Alive
 8. The client receives this data and gets their response back.
 
 
+#### ASGI Server Overview
