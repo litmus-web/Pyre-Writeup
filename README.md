@@ -206,7 +206,7 @@ fn main() {
 ### Basic Design Principles
 
 #### HTTP Request request - response cycle
-![Untitled Document(3)](https://user-images.githubusercontent.com/57491488/112736218-efe34b80-8f48-11eb-8ad9-1fd135932058.png)
+![image](https://user-images.githubusercontent.com/57491488/112757610-5c5e5900-8fe2-11eb-9bc8-4ff1086ef6f1.png)
 
 1. The client sends the initial HTTP request with a socket connection, this looks something like this: 
 ```
