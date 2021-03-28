@@ -308,6 +308,10 @@ let len= if status.is_partial() {
 };
 ```
 
+##### Parser Logic Flow
+![image](https://user-images.githubusercontent.com/57491488/112762383-427b4100-8ff7-11eb-8fe3-9aed0495c856.png)
+
+
 #### Flow Control
 Flow control  is a essential part of my HTTP server as it is responsible for controlling data written to the socket buffer and data received from the socket, if we do not control the flow of data it could leave us vulnerable to response inject attacks potentially using more memory than we have causing the program or physical server itself to crash.
 
@@ -359,6 +363,7 @@ enum Protcols {
 
 These enums will help me choose which protocol to target with events from the main server handler, although this does not stop the limitation that I must create each protcol pre-emptively rather than lazily, although this should not be an issue for my investigation as I am only using one set protocol (HTTP/1 or H1 as I will call it).
 
+##### Protocol Logic Flow
 ![image](https://user-images.githubusercontent.com/57491488/112757569-2faa4180-8fe2-11eb-8a46-83e012c6bac3.png)
 
 
