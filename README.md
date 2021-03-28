@@ -239,6 +239,7 @@ Connection: Keep-Alive
 
 #### Server Flow
 ![image](https://user-images.githubusercontent.com/57491488/112757289-0c32c700-8fe1-11eb-990e-6793f7259f3e.png)
+
 This flow chart shows the basic execution model of the Protocol (ignoring TCP keep alive handlers, receiver functions and processors) 
 
 #### Flow Control
