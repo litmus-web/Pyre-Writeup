@@ -427,8 +427,7 @@ In my project I will be using alot of structs and impl's however some are more i
 ##### H1Protocol
 ![image](https://user-images.githubusercontent.com/57491488/112765238-26ca6780-9004-11eb-8130-10b51ab2b533.png)
 
-##### Sender
-
-##### Reciever
+##### DataSender & DataReciever
+![Untitled Document(10)](https://user-images.githubusercontent.com/57491488/112765587-be7c8580-9005-11eb-926e-8dd170406b19.png)
 
 
