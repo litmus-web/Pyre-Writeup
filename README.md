@@ -586,3 +586,6 @@ def setup(app: App):
 ```
 
 As you can see from the above I wish to allow my classes to contain not only the endpoints themselves but also the middlewear and error handlers making the systems more readable and easier to maintain.
+
+
+## Testing
