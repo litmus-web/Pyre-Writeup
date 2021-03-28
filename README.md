@@ -204,8 +204,31 @@ fn main() {
 ```
 
 ### Basic Design Principles
+
+
+#### HTTP Request overview
 ![Untitled Document(3)](https://user-images.githubusercontent.com/57491488/112736218-efe34b80-8f48-11eb-8ad9-1fd135932058.png)
 
-
+1. The client sends the initial HTTP request with a socket connection, this looks something like this: 
+```
+GET /hello.htm HTTP/1.1
+User-Agent: Mozilla/4.0 (compatible; MSIE5.01; Windows NT)
+Host: www.tutorialspoint.com
+Accept-Language: en-us
+Accept-Encoding: gzip, deflate
+Connection: Keep-Alive
+```
+2. The server process accepts the pending socket and begins reading data from the socket when able to, putting the data into a read buffer.
+3. The parser then takes the read data and parses it into it's core components:
+    - Method
+    - Path
+    - Protocol and Version
+    - Headers
+    - Body
+4. Once the request has been parsed the resultant data is sent to the framework which handles all the logic and handling of that response.
+5. The framework returns a structured response containing the relevant information
+6. The response builder turns this structured response into the raw binary data and adds it to the writer buffer.
+7. When the socket can be written to data is taken from the buffer and written to the socket.
+8. The client receives this data and gets their response back.
 
 
