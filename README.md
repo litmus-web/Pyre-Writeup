@@ -386,6 +386,49 @@ These enums will help me choose which protocol to target with events from the ma
 ##### Protocol Logic Flow
 ![image](https://user-images.githubusercontent.com/57491488/112757569-2faa4180-8fe2-11eb-8a46-83e012c6bac3.png)
 
+#### Base Traits
 
+For this project I am planning to make use of Rust's trait system which allow me to pre-define a set of methods to create a shared and standardised set of data.
+
+##### BaseTransport
+Defined the necessary methods for a transport handler, this handle all socket related interactions for python mostly adding and removing file descriptor watchers for the event loop. The only exception for this will be the `close` function which will close the socket using asyncio's `Loop.call_soon` system in order to asyncronously shutdown.
+
+- *close*
+- *pause_reading*
+- *resume_reading*
+- *pause_writing*
+- *resume_writing*
+
+##### ProtocolBuffers 
+Defines the necessary methods for implementing data handling for the high level protocols, this is mostly to do with reading and writing to the socket.
+
+- *data_received* - Invoked when data is read from the socket passing the buffer.
+- *fill_write_buffer* - Invoked when data is ready to be written to the socket.
+- *eof_received* - Invoked when the EOF has been sent by the socket.
+
+##### ProtocolBuffers 
+This implements a more low level system for communication with the socket, this is what the protocol manager will implement in order to correctly handle reading and writing distribution between the socket and higher level protocols like the `h1` protocol that I will be implementing.
+
+- *read_buffer_acquire* - Invoked when data is read from the socket passing the buffer.
+- *read_buffer_filled* - Invoked when data is ready to be written to the socket.
+- *write_buffer_acquire* - Invoked when the EOF has been sent by the socket.
+- *write_buffer_drained* - Invoked when the EOF has been sent by the socket.
+
+#### Important Structs
+
+In my project I will be using alot of structs and impl's however some are more important than others which need special attention.
+
+##### Server
+![image](https://user-images.githubusercontent.com/57491488/112765267-46fa2680-9004-11eb-966d-4b73690d4c7a.png)
+
+##### Client
+![image](https://user-images.githubusercontent.com/57491488/112765252-36e24700-9004-11eb-80b0-100a2f9247bb.png)
+
+##### H1Protocol
+![image](https://user-images.githubusercontent.com/57491488/112765238-26ca6780-9004-11eb-8130-10b51ab2b533.png)
+
+##### Sender
+
+##### Reciever
 
 
