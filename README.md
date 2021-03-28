@@ -237,6 +237,24 @@ Connection: Keep-Alive
 
 ### Server Design
 
+The server will be built off of the raw AsyncIO api for watching for socket ready-ness, I have chosen not to use the inbuilt Asyncio protocol system as it leads to several conflicts in design between Rust and Python which hurts both performance and code maintainability.
+
+Instead I plan on creating a Rust replica of this system but with a few changes:
+- The system will be poll based rather than callback based.
+- Protocols will be made for each supported protocol and rotate by a single manager.
+- The server will have control of a given reader and writer buffer which is shared to the protocols not passed by value.
+- Clients will stay inside the Rust system, it will never be given to Python. Only file descriptor handling will be maanged by python.
+
+#### Memory Management
+
+##### Speed via bulk allocations
+To improve performance Pyre will use bulk style allocation, meaning protocols will allocate their required memory maximum as soon as they're made rather than when they're needed, this cuts down memory allocations down to a fraction of what they would be at the cost of memory usage which brings me onto my next point.
+
+#### Minimising memory usage
+The server is opting to use more agressive memory usage in order to aid performance however, the this should be re-used for many clients rather than allocated once, used once and then removed as large allocations can take more time to allocate.
+
+For this I plan on use the [`slab crate`](https://crates.io/crates/slab) to allow me to re-use allocated client handlers as well as [crossbeam](https://crates.io/crates/crossbeam) to provide me with a set of utils (in this case a array based queue) in order to give 
+
 #### Server Flow
 ![image](https://user-images.githubusercontent.com/57491488/112757289-0c32c700-8fe1-11eb-990e-6793f7259f3e.png)
 
