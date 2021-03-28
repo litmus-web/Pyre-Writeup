@@ -280,6 +280,6 @@ class FlowControl:
 ```
 
 #### Protocol Switching
-![Untitled Document(5)](https://user-images.githubusercontent.com/57491488/112757023-b7db1780-8fdf-11eb-9952-179f7efd57a9.png)
+![image](https://user-images.githubusercontent.com/57491488/112757569-2faa4180-8fe2-11eb-8a46-83e012c6bac3.png)
 
 
