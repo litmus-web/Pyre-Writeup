@@ -431,3 +431,158 @@ In my project I will be using alot of structs and impl's however some are more i
 ![Untitled Document(10)](https://user-images.githubusercontent.com/57491488/112765587-be7c8580-9005-11eb-926e-8dd170406b19.png)
 
 
+### Framework Design
+For the framework I want to build a micro framework built around class-based views, I find there is often a lack in decent class based views in existing frameworks even though they are the key organised code. In my system I want to produce class based views where each class is a ‘blueprint’ for a set of endpoints, these can be of any size and make full use of instance varibles etc...
+
+
+Class methods can be turned into ‘endpoints’ by a decorator system I plan to implement that will automatically produce the relevant callables for parsing and converting data sent to them. This also allows me to add middle-wear and error handling options for each endpoint as well as a overall blueprint handler, this makes designing clean endpoints much easier for developers and users of my project.
+
+
+My framework also needs to handle routing, header manipulation, cookies, sessions and responses. 
+- To achieve the routing, I plan on using Rust to build the underlying router using a linear matching time regex engine, regex-based routes allow me and my client to produce more complex URL validators when routing to endpoints without having to manually split and compare each section of the url.
+- To make header manipulation easy I plan on making a header class that will automatically validate headers before setting them as to ensure HTTP compatibility.
+- Cookies will be handled as part of the responsesand requests and will work in a similar way to a dictionary with a few extra options, I will use a class to achieve this using getter and setter dunders.
+- Sessions are built upon cookies and will also be apart of responses and requests using a module called [ItsDangerous](https://pypi.org/project/itsdangerous/) to securely encrypt and decrypt the cookie sessions
+
+To achieve my targets I will break my framework up into its key parts
+- Request
+- Router
+- Responses
+- Converters
+- Middlewear
+- Sessions and Cookies
+- Framework Setup
+
+#### Framework Request-Response Flow
+The first part of the framework cycle is to take the initial ASGI or PSGI call, match paths and convert it to a Request object making is easier for the user to build their applications around.
+
+The framework will start with a standard coroutine as shown here:
+```py
+async def app(scope, receive, send):
+""" Our default callable that all interactions to and fromthe server will pass through."""
+
+# Various handling...
+
+return None
+```
+
+Using the provided `scope` parameter which is a dictionary we can construct our Requestclass around that. However, we will match our URL to any of our endpoints before constructing a object as this is quite a expensive operation in terms of system resources per request.
+
+#### Request Handling Flow
+![image](https://user-images.githubusercontent.com/57491488/112765945-75c5cc00-9007-11eb-91d6-4bdadc7bd533.png)
+
+#### Request Class Design 
+##### BaseRequest Class
+The base request class is what all other request classes extend from. This will contain the properties and methods that all request types share regardless of the Request type e.g. Websockets.
+
+The base request class should contain the:
+- Method
+- URL
+- Headers
+- Query String
+- Body streaming interface
+- Server Info
+- Client Info
+
+| Method / Property | Type                  | Desc                                                                                                                          |
+|-------------------|-----------------------|-------------------------------------------------------------------------------------------------------------------------------|
+| method            | str                   | A standard HTTP method e.g. “GET”, “POST”, etc...                                                                             |
+| url               | str                   | The requested url which has been percent decoded.                                                                             |
+| headers           | RequestHeaders        | A RequestHeaders instance containing the raw headers that are then parsed as and when needed using getter and setter dunders. |
+| receive           | ASGI Receive Callback | The property containing the ASGI Receive callback.                                                                            |
+| server_info       | Tuple[str, int]       | A 2 length long tuple containing the address (str) and the port (int)                                                         |
+| remote_address    | Tuple[str, int]       | A 2 length long tuple containing the address (str) and the port (int)                                                         |
+
+##### HTTPRequest Class
+The HTTP request class extends the “BaseRequest” class and will contain the following extra methods:
+
+- Text body parsing
+- JSON body parsing
+- Session interface
+- Cookies interface
+
+| Method / Property | Type           | Desc                                                                                                                |
+|-------------------|----------------|---------------------------------------------------------------------------------------------------------------------|
+| text()            | coroutine      | A awaitable method that produces the full text body, consuming the whole request body regardless of content-length. |
+| text_iter()       | async iterator | A chunked version of “text()”, this gives the client control of how much they want to read before processing.       |
+| json()            | coroutine      | A awaitable method that calls text() and then parses the responding text to a JSON type object.                     |
+| session           | RequestSession | A RequestSession instance that behaves like a dictionary.                                                           |
+| cookies           | RequestCookies | A RequestCookies instance that behaves like a imutable dictionary.                                                  |
+
+##### Request Class Inheritance Diagram
+![image](https://user-images.githubusercontent.com/57491488/112766051-f4bb0480-9007-11eb-9143-73b6f49b1f4d.png)
+
+##### text() method logic
+![image](https://user-images.githubusercontent.com/57491488/112766068-0bf9f200-9008-11eb-83d9-b38444c12da3.png)
+
+##### json() method logic
+![image](https://user-images.githubusercontent.com/57491488/112766076-174d1d80-9008-11eb-8051-84805e26814a.png)
+
+##### text_iter() method logic
+![image](https://user-images.githubusercontent.com/57491488/112766086-22a04900-9008-11eb-8f9f-64ed77c4e114.png)
+
+#### Cookies and Sessions and Sessions
+Cookies and Sessions are a key part in any web application and are a essential feature of the framework. When designing my cookieshandler I will be using the Mozzila MDN web docsto make sure I provide the required features for any web application making use of them.
+
+For sessions I plan on using  [ItsDangerous](https://pypi.org/project/itsdangerous/) by The Pallets Project create the encrypted cookie sessions.
+
+##### Cookie Setting and Reading
+Cookies can be set by using the header:
+
+```
+Set-Cookie: <cookie-name>=<cookie-value>
+```
+
+*Example Cookie Setting Response:*
+```
+HTTP/2.0 200 OK
+Content-Type: text/html
+Set-Cookie: yummy_cookie=choco
+Set-Cookie: tasty_cookie=strawberry
+```
+
+Once the cookies have been set as part of the response they are then added back to the next requests sent by the client if they match the cookie constraint e.g. url, client and server.
+
+*Example Request with Cookies*
+```
+Cookie: yummy_cookie=choco; tasty_cookie=strawberry
+```
+
+###### Sessions
+Secure sessions are just built on top of the cookie system but use a method of encryption to secure the data, for my project this will be handled by the module “ItsDangerous” using dump and load methods to interact with the session.
+
+#### Endpoint Layout and Design
+Due to the lack of class-based endpoint support in Python HTTP frameworks I wish to orient my framework around them filling in a large gap in the field. They help maintain organisation across the project, provide greater organisation and a cleaner name space overall.
+
+To do this I will be using a base “Blueprint” class that has the nessesairly magic methods to allow the decorator based approach I wish to take as show bellow.
+
+###### Example Class-base Endpoints
+```py
+# blueprint.py
+
+from pyre import framework
+from pyre.framework import App, Request, responses
+
+
+class MyEndpoint(framework.Blueprint):
+    def __init__(self, app: App):
+        self._app = app
+
+    @framework.endpoint("/hello/{name:string}", methods=["GET"])
+    async def on_get_hello(self, name: str):
+        return f"Hello, {name}!"
+
+    @framework.endpoint("/hello/{name:string}", methods=["POST"])
+    async def on_post_hello(self, request: Request, name: str):
+        body = await request.body.json()
+        return responses.JSONResponse(
+            {"message": f"Hello, {name}! You are aged: {body['age']}"},
+            status=200,
+        )
+    
+
+def setup(app: App):
+    app.add_blueprint(MyEndpoint(app))
+```
+
+As you can see from the above I wish to allow my classes to contain not only the endpoints themselves but also the middlewear and error handlers making the systems more readable and easier to maintain.
