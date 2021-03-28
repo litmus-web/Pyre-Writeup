@@ -257,6 +257,19 @@ The server is opting to use more agressive memory usage in order to aid performa
 
 For this I plan on use the [slab crate](https://crates.io/crates/slab) to allow me to re-use allocated client handlers as well as [crossbeam](https://crates.io/crates/crossbeam) to provide me with a set of utils (in this case a array based queue) in order to give a queue of free clients to re-use allocations.
 
+#### Utilities
+
+Due to my mix of both Python and Rust exception handling can become awkward, because of this I plan on using Rust's macro system in order to make my code more DRY and convert Rust errors to Python errors in a cleaner system.
+
+Macros are a method of build time code generation in rust, this can simplify and reduce the code base considerably in Rust.
+
+##### Conversion Macro
+```rust
+macro_rules! conv_err {
+    ( $e:expr ) => ( $e.map_err(|e| PyRuntimeError::new_err(format!("{}", e))) )
+}
+```
+
 #### Server Flow
 ![image](https://user-images.githubusercontent.com/57491488/112757289-0c32c700-8fe1-11eb-990e-6793f7259f3e.png)
 
@@ -347,6 +360,7 @@ enum Protcols {
 These enums will help me choose which protocol to target with events from the main server handler, although this does not stop the limitation that I must create each protcol pre-emptively rather than lazily, although this should not be an issue for my investigation as I am only using one set protocol (HTTP/1 or H1 as I will call it).
 
 ![image](https://user-images.githubusercontent.com/57491488/112757569-2faa4180-8fe2-11eb-8a46-83e012c6bac3.png)
+
 
 
 
