@@ -247,13 +247,15 @@ Instead I plan on creating a Rust replica of this system but with a few changes:
 
 #### Memory Management
 
+Memory management is a key factor in my design as it can make or break both stability and performance, in order to proply make use of Rust's low level style I have came up with some set points:
+
 ##### Speed via bulk allocations
 To improve performance Pyre will use bulk style allocation, meaning protocols will allocate their required memory maximum as soon as they're made rather than when they're needed, this cuts down memory allocations down to a fraction of what they would be at the cost of memory usage which brings me onto my next point.
 
-#### Minimising memory usage
+##### Minimising memory usage
 The server is opting to use more agressive memory usage in order to aid performance however, the this should be re-used for many clients rather than allocated once, used once and then removed as large allocations can take more time to allocate.
 
-For this I plan on use the [`slab crate`](https://crates.io/crates/slab) to allow me to re-use allocated client handlers as well as [crossbeam](https://crates.io/crates/crossbeam) to provide me with a set of utils (in this case a array based queue) in order to give 
+For this I plan on use the [slab crate](https://crates.io/crates/slab) to allow me to re-use allocated client handlers as well as [crossbeam](https://crates.io/crates/crossbeam) to provide me with a set of utils (in this case a array based queue) in order to give a queue of free clients to re-use allocations.
 
 #### Server Flow
 ![image](https://user-images.githubusercontent.com/57491488/112757289-0c32c700-8fe1-11eb-990e-6793f7259f3e.png)
