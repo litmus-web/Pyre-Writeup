@@ -262,6 +262,39 @@ For this I plan on use the [slab crate](https://crates.io/crates/slab) to allow 
 
 This flow chart shows the basic execution model of the Protocol (ignoring TCP keep alive handlers, receiver functions and processors) 
 
+#### Parsing
+
+One of the key parts of my server will be the parser, for the HTTP/1 protocol I will be using the [httparse crate](https://crates.io/crates/httparse) in order to provide a zero copy parser, this parser using the push style rather than a callback based system which is more suited to Rust's style.
+
+Due to limtations however, this required me to pre-define an allocate a array of headers, this mean I am going to allow a maximum of 100 headers which is more than enough due to the average amount of headers being no more than 30 headers. This does create the issue however, that this can create bulky allocations which can be slow and in-efficient and also increase memory usage.
+
+##### Fixing the Header issue
+
+To get around the aformentioned issue with pre-defining header amounts I am going to be using unsafe Rust which forgoes the memory safety and constraints of the normal language, this is generally very dangerous to use and must be considered carefully, for this specific case however, we will be fine as we garentee that the un-initialised memory using `mem::unitialised()` will be initialised before we use it.
+
+This solution fixes the issue of bulky allocations by faking the memory allocation in such a way to satify the Rust compiler and allow itself to be initialised when data is actually written to it, this means we are not actually allocating 100 headers instead we only allocate what we need.
+
+##### Basic Parsing Design
+```rust
+// This should be fine as it is guaranteed to be initialised
+// before we use it, just waiting for the ability to use
+// MaybeUninit, till then here we are.
+let mut headers: [Header<'_>; MAX_HEADERS] = unsafe {
+    mem::uninitialized()
+};
+
+let body = buffer.clone();
+
+let mut request = Request::new(&mut headers);
+let status = conv_err!(request.parse(&body))?;
+
+let len= if status.is_partial() {
+    return Ok(())
+} else {
+    status.unwrap()
+};
+```
+
 #### Flow Control
 Flow control  is a essential part of my HTTP server as it is responsible for controlling data written to the socket buffer and data received from the socket, if we do not control the flow of data it could leave us vulnerable to response inject attacks potentially using more memory than we have causing the program or physical server itself to crash.
 
@@ -316,15 +349,4 @@ These enums will help me choose which protocol to target with events from the ma
 ![image](https://user-images.githubusercontent.com/57491488/112757569-2faa4180-8fe2-11eb-8a46-83e012c6bac3.png)
 
 
-#### Parsing
-
-One of the key parts of my server will be the parser, for the HTTP/1 protocol I will be using the [httparse crate](https://crates.io/crates/httparse) in order to provide a zero copy parser, this parser using the push style rather than a callback based system which is more suited to Rust's style.
-
-Due to limtations however, this required me to pre-define an allocate a array of headers, this mean I am going to allow a maximum of 100 headers which is more than enough due to the average amount of headers being no more than 30 headers. This does create the issue however, that this can create bulky allocations which can be slow and in-efficient and also increase memory usage.
-
-##### Fixing the Header issue
-
-To get around the aformentioned issue with pre-defining header amounts I am going to be using unsafe Rust which forgoes the memory safety and constraints of the normal language, this is generally very dangerous to use and must be considered carefully, for this specific case however, we will be fine as we garentee that the un-initialised memory using `mem::unitialised()` will be initialised before we use it.
-
-This solution fixes
 
