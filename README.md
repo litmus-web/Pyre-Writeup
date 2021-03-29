@@ -279,7 +279,7 @@ This flow chart shows the basic execution model of the Protocol (ignoring TCP ke
 
 One of the key parts of my server will be the parser, for the HTTP/1 protocol I will be using the [httparse crate](https://crates.io/crates/httparse) in order to provide a zero copy parser, this parser using the push style rather than a callback based system which is more suited to Rust's style.
 
-This lets us control our memory usage and body buffer better than the normal callback type parsers like the common HTTPTools parser for Pythonit is important that we maximise Rust’s fast execution time and zero-cost abstraction system to make this as performant as possible as this is generally the most expensive operation to run.
+This lets us control our memory usage and body buffer better than the normal callback type parsers like the common HTTPTools parser for Python is important that we maximise Rust’s fast execution time and zero-cost abstraction system to make this as performant as possible as this is generally the most expensive operation to run.
 
 The parser works by constructing a array of n amount of EMPTY_HEADER types where n is the maximum number of headers you wish to allow, I plan on making this a customisable number towards the end of the project allowing greater customisability than other servers. We can simply define out empty headerblock in Rust like so:
 
