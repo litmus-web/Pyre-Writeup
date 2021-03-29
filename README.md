@@ -4,7 +4,7 @@
 
 - [Analysis](https://github.com/Project-Dream-Weaver/Pyre-Writeup/blob/main/README.md#analysis)
 - [Design](https://github.com/Project-Dream-Weaver/Pyre-Writeup/blob/main/README.md#documented-design)
-- [Code Repo](https://github.com/Project-Dream-Weaver/Pyre-Writeup/blob/main/README.md#code)
+- [Code Repo](https://github.com/Project-Dream-Weaver/Pyre)
 - [Testing](https://github.com/Project-Dream-Weaver/Pyre-Writeup/blob/main/README.md#testing)
 - [Evaluation](https://github.com/Project-Dream-Weaver/Pyre-Writeup/blob/main/README.md#evaluation)
 
