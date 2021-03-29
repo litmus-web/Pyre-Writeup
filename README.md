@@ -589,3 +589,8 @@ As you can see from the above I wish to allow my classes to contain not only the
 
 
 ## Testing
+
+### Seperate Benchmarks
+![image](https://user-images.githubusercontent.com/57491488/112844909-267dab00-909c-11eb-9fb7-3a2f0861b7cc.png)
+
+
