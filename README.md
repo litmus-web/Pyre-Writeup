@@ -4,9 +4,9 @@
 
 - [Analysis](https://github.com/Project-Dream-Weaver/Pyre-Writeup/blob/main/README.md#analysis)
 - [Design](https://github.com/Project-Dream-Weaver/Pyre-Writeup/blob/main/README.md#documented-design)
-- [Code Repo]()
-- [Testing]()
-- [Evaluation]()
+- [Code Repo](https://github.com/Project-Dream-Weaver/Pyre-Writeup/blob/main/README.md#code)
+- [Testing](https://github.com/Project-Dream-Weaver/Pyre-Writeup/blob/main/README.md#testing)
+- [Evaluation](https://github.com/Project-Dream-Weaver/Pyre-Writeup/blob/main/README.md#evaluation)
 
 ## Analysis
 ### The problem
