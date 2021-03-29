@@ -588,15 +588,15 @@ def setup(app: App):
 As you can see from the above I wish to allow my classes to contain not only the endpoints themselves but also the middlewear and error handlers making the systems more readable and easier to maintain.
 
 
-### Code
+## Code
 
 The full coe implemntation can be found in the [Pyre Repository](https://github.com/Project-Dream-Weaver/Pyre) 
 
-### Testing
+## Testing
 
 In order to properly gauge my project's abilities I have used test driven development as well as performance driven development in order to point my project in the right direction.
 
-#### Unit Testing
+### Unit Testing
 
 For my testing I am using unit testing, as part of this I am using a popular testing system called `pytest` for Python, due to the nature of PyO3 and it's dependancy on Python however I cannot fully test Rust in it's raw code base and must be tested through Python.
 
@@ -604,21 +604,40 @@ All unit tests for my project can be found [in the testing folder in the code ba
 
 These tests can be ran with `pytest` if all wheels are built and installed.
 
-#### Code Coverage
+### Code Coverage
 
 In order to aid my testing I will also be using the `coverage` module in Python to see what code has and has not been ran.
 
-#### Seperate Benchmarks
+### Seperate Benchmarks
 
 In order to gauge my progress in this project I am using a benchmarking tool I made called [rewrk](https://github.com/ChillFish8/rewrk) in order to track latency and requests throughput among other things.
 
 For my finished project I have plotted the results of a best of 3 rounds between Uvicorn (blue) and Pyre (red)
 ![image](https://user-images.githubusercontent.com/57491488/112844909-267dab00-909c-11eb-9fb7-3a2f0861b7cc.png)
+*benchmarked on Lenovo 2c 4t 2.3Ghz CPU with 1 worker proccess*
 
 The above images show that Pyre is on average over 40% higher throughput than Uvicorn as well as 40% lower latency.
 
-### Evaluation
+## Evaluation
 
 ***Sucess!***
 
+Overall my project was a sucess, I was able to most of my original objects and design criteria to a full and complete stage, however, I was unable to produce the pre-built wheels as defined in objective 5 due to a lack of time near the end of my project although this was a minor point and all other objectives have been successfully achieved.
+
+### Reduction of Latency
+![image](https://user-images.githubusercontent.com/57491488/112849025-92621280-90a0-11eb-96a2-f69aa3618252.png)
+
+As you can see in the above imade with Uvicorn(blue) and Pyre(red) I achieve an average reduction of latency by around 50% which is over my 40% goal.
+
+### Increase Throughput
+![image](https://user-images.githubusercontent.com/57491488/112848941-81b19c80-90a0-11eb-9017-91c44570a39c.png)
+
+In the above image like my latency reduction my project (red) is around 50% higher throughput than uvicorn (blue) which is again higher than my original 40% goal.
+
+### Unit Test Results
+Thanks to my constant testing and benchmarking I was able to have all my tests pass as expected, although during the development various errors were raised and fixed thanks to the use of these tests making my project overall more reliable and stable.
+
+### Memory Usage Evalutation
+Overall my project's memory usage although is higher than Uvicorn is able to make better use of the memory it allocates, during benchmarking my project uses around 200 - 400 MB rss usage which around 10x more than Uvicorn.
+However, in deployment circumstances workers are scaled to the number of cores on a given machine which is often 10x the amount of Ram so I do not believe this is an issue for any real world deployment schemes.
 
