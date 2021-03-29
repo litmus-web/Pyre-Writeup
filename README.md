@@ -588,9 +588,37 @@ def setup(app: App):
 As you can see from the above I wish to allow my classes to contain not only the endpoints themselves but also the middlewear and error handlers making the systems more readable and easier to maintain.
 
 
-## Testing
+### Code
 
-### Seperate Benchmarks
+The full coe implemntation can be found in the [Pyre Repository](https://github.com/Project-Dream-Weaver/Pyre) 
+
+### Testing
+
+In order to properly gauge my project's abilities I have used test driven development as well as performance driven development in order to point my project in the right direction.
+
+#### Unit Testing
+
+For my testing I am using unit testing, as part of this I am using a popular testing system called `pytest` for Python, due to the nature of PyO3 and it's dependancy on Python however I cannot fully test Rust in it's raw code base and must be tested through Python.
+
+All unit tests for my project can be found [in the testing folder in the code base](https://github.com/Project-Dream-Weaver/Pyre/tree/main/tests) all with their relevant descriptions and testing systems.
+
+These tests can be ran with `pytest` if all wheels are built and installed.
+
+#### Code Coverage
+
+In order to aid my testing I will also be using the `coverage` module in Python to see what code has and has not been ran.
+
+#### Seperate Benchmarks
+
+In order to gauge my progress in this project I am using a benchmarking tool I made called [rewrk](https://github.com/ChillFish8/rewrk) in order to track latency and requests throughput among other things.
+
+For my finished project I have plotted the results of a best of 3 rounds between Uvicorn (blue) and Pyre (red)
 ![image](https://user-images.githubusercontent.com/57491488/112844909-267dab00-909c-11eb-9fb7-3a2f0861b7cc.png)
+
+The above images show that Pyre is on average over 40% higher throughput than Uvicorn as well as 40% lower latency.
+
+### Evaluation
+
+***Sucess!***
 
 
